@@ -1,32 +1,11 @@
 {
 	"compilerOptions": {
-		/* Runtime emit */
-		"target": "ESNext",
-
-		/* Type-level libs (Node já suporta ES2024 APIs) */
-		"lib": ["ES2024", "DOM"],
-
-		/* Node ESM environment */
-		"module": "NodeNext",
-		"moduleResolution": "NodeNext",
-		"moduleDetection": "force",
-
-		/* Package.json-based resolution (Node >= 20 padrão) */
-		"resolvePackageJsonExports": true,
-		"resolvePackageJsonImports": true,
-
-		/* Interop */
-		"esModuleInterop": true,
-		"allowSyntheticDefaultImports": true,
-
-		/* Strictness */
-		"strict": true,
-		"skipLibCheck": false,
-
-		/* Class fields consistent with modern JS */
-		"useDefineForClassFields": true,
-
-		/* Path handling */
+		 "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES2023",
+    "strict": true,
+    "esModuleInterop": true,
+    "ignoreDeprecations": "6.0",
 		"baseUrl": "./",
 		"paths": {
 			"@/*": ["./src/*"]
