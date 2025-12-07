@@ -1,5 +1,5 @@
-import { Argon2Hasher } from "@/infra/hash/argon-hasher";
-import { prisma } from "@/infra/prisma";
+import { registerUser } from "@/application/use-cases/user/register-user";
+import { EmailAlreadyUsedError } from "@/domain/error/email-already-used.error";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
@@ -12,27 +12,21 @@ const creteUserSchema = z.object({
 
 export async function registerUserController(request: FastifyRequest, reply: FastifyReply) {
     const user = creteUserSchema.parse(request.body)
-    const userExist = await prisma.user.findUnique({
-        where: {
-            email: user.email
-        }
-    })
 
-    if (userExist) {
-        return reply.status(409).send({
-            message: "User already exists"
+    try {
+        await registerUser({
+            email: user.email,
+            name: user.name,
+            password: user.password
         })
+        reply.status(201).send()
+    } catch (error) {
+        const emailExistError = error instanceof EmailAlreadyUsedError
+
+        if (emailExistError) {
+            return reply.status(409).send({ message: error.message })
+        }
+
     }
 
-    const hashedPassword = await Argon2Hasher().hash(user.password)
-
-    await prisma.user.create({
-        data: {
-            name: user.name,
-            email: user.email,
-            password_hash: hashedPassword
-        }
-    })
-
-    reply.status(201).send()
 }
