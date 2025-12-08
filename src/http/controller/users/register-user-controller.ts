@@ -1,5 +1,7 @@
-import { registerUser } from "@/application/use-cases/user/register-user";
+import { RegisterUserUseCase } from "@/application/use-cases/user/register-user";
 import { EmailAlreadyUsedError } from "@/domain/error/email-already-used.error";
+import { Argon2Hasher } from "@/infra/hash/argon-hasher";
+import { inMemoryUserRepositories } from "@/repositories/in-memory-user-repositories";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
@@ -9,16 +11,14 @@ const creteUserSchema = z.object({
     email: z.email(),
     password: z.string(),
 })
+const userRepository = new inMemoryUserRepositories()
 
 export async function registerUserController(request: FastifyRequest, reply: FastifyReply) {
     const user = creteUserSchema.parse(request.body)
-
+    const hasher = new Argon2Hasher()
     try {
-        await registerUser({
-            email: user.email,
-            name: user.name,
-            password: user.password
-        })
+        const registerUserUseCase = new RegisterUserUseCase(userRepository, hasher)
+        await registerUserUseCase.execute(user)
         reply.status(201).send()
     } catch (error) {
         const emailExistError = error instanceof EmailAlreadyUsedError
