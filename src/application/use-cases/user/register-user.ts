@@ -1,5 +1,5 @@
+import { EmailAlreadyUsedError } from "@/application/error/email-already-used.error"
 import type { Hasher } from "@/application/port/hasher"
-import { EmailAlreadyUsedError } from "@/domain/error/email-already-used.error"
 import type { UsersRepository } from "@/repositories/users-repository"
 
 interface User {
