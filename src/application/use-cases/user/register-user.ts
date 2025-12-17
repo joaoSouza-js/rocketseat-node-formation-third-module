@@ -1,32 +1,29 @@
+import type { RegisterUserCommand, RegisterUserUseCaseResponse } from "@/application/dto/user-dto/register-user"
 import { EmailAlreadyUsedError } from "@/application/error/email-already-used.error"
 import type { Hasher } from "@/application/port/hasher"
+import type { IdGenerator } from "@/application/port/id-generator"
 import type { UsersRepository } from "@/repositories/users-repository"
-
-interface User {
-    name: string,
-    email: string,
-    password: string
-}
-
 
 export class RegisterUserUseCase {
 
-    constructor(private userRepository: UsersRepository, private hasher: Hasher) { }
+    constructor(private userRepository: UsersRepository, private hasher: Hasher, private idGenerator: IdGenerator) { }
 
-    async execute(user: User) {
-        const userExist = await this.userRepository.userEmailExists(user.email)
+    async execute(input: RegisterUserCommand): Promise<RegisterUserUseCaseResponse> {
+        const userExist = await this.userRepository.userEmailExists(input.email)
 
         if (userExist) {
-            throw new EmailAlreadyUsedError(user.email)
+            throw new EmailAlreadyUsedError(input.email)
         }
 
-        const hashedPassword = await this.hasher.hash(user.password)
+        const hashedPassword = await this.hasher.hash(input.password)
 
-        await this.userRepository.create({
-            name: user.name,
-            email: user.email,
+        const userCreated = await this.userRepository.create({
+            id: this.idGenerator.next(),
+            name: input.name,
+            email: input.email,
             password_hash: hashedPassword
         })
+        return { user: userCreated }
     }
 
 }
