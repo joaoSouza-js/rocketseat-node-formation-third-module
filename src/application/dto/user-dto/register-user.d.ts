@@ -1,3 +1,5 @@
+import type { User } from "@/repositories/users-repository"
+
 export interface RegisterUserCommand {
     name: string,
     email: string,
@@ -5,10 +7,5 @@ export interface RegisterUserCommand {
 }
 
 export interface RegisterUserUseCaseResponse {
-    user: {
-        id: string,
-        name: string,
-        email: string,
-        password_hash: string
-    }
+    user: User
 }

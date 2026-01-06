@@ -8,9 +8,9 @@ export class inMemoryUserRepositories implements UsersRepository {
         return Promise.resolve(user)
     }
 
-    userEmailExists(email: string): Promise<boolean> {
-        const userExist = this.users.find(user => user.email === email)
-        return Promise.resolve(!!userExist)
+    findUserByEmail(email: string): Promise<User | null> {
+        const user = this.users.find(user => user.email === email) ?? null
+        return Promise.resolve(user)
     }
 
 }

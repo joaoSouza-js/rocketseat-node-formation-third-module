@@ -5,6 +5,7 @@ import type { RegisterUser, User, UsersRepository } from "@/repositories/users-r
 
 export class prismaUsersRepositories implements UsersRepository {
 
+
     async create(user: RegisterUser): Promise<User> {
         const newUser = await prisma.user.create({
             data: {
@@ -17,13 +18,14 @@ export class prismaUsersRepositories implements UsersRepository {
         return newUser
     }
 
-    async userEmailExists(email: string): Promise<boolean> {
-        const userExist = await prisma.user.findUnique({
+
+
+    async findUserByEmail(email: string): Promise<User | null> {
+        const user = await prisma.user.findUnique({
             where: {
                 email: email
             }
         })
-
-        return !!userExist
+        return user
     }
 }

@@ -1,7 +1,7 @@
 import type { RegisterUserCommand } from "@/application/dto/user-dto/register-user";
-import { EmailAlreadyUsedError } from "@/application/error/email-already-used.error";
+import { EmailAlreadyUsedError } from "@/application/error/email-not-founded.error";
 import type { Hasher } from "@/application/port/hasher";
-import { IdGenerator } from "@/application/port/id-generator";
+import type { IdGenerator } from "@/application/port/id-generator";
 import { hashMock } from "@/infra/hash/hash-mock";
 import { IdGeneratorMock } from "@/infra/id-generator/id-generator-mock";
 import { inMemoryUserRepositories } from "@/repositories/in-memory/in-memory-user-repositories";
