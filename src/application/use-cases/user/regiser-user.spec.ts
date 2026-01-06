@@ -35,7 +35,6 @@ describe("Register Use Case", () => {
 
 
         const transaction = await registerUserUseCase.execute(user);
-        console.log("id ->", transaction.user.id)
         expect(transaction.user.id).toEqual(expect.any(String))
     });
 
