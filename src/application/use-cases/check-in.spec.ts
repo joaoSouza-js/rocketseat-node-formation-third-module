@@ -42,7 +42,7 @@ describe("Check in use case", () => {
         })
     })
 
-    it("should not make check in if gym doesn't exist", async () => {
+    it("should throw GymNotFoundError when attempting to check in to a non-existent gym", async () => {
         const checkInCommand: CheckInCommand = {
             gymId: "gym-tes",
             latitude: 93,
@@ -53,7 +53,7 @@ describe("Check in use case", () => {
         await expect(SystemUnderTest.execute(checkInCommand)).rejects.instanceOf(GymNotFoundError)
     })
 
-    it("should not make check in if  distance between user and gym is greater than 100 meters", async () => {
+    it("should prevent check-in when calculated distance exceeds 100 meters", async () => {
         const gym = await gyms.create({
             title: "gym-tes",
             longitude: 93,
@@ -76,7 +76,7 @@ describe("Check in use case", () => {
 
     })
 
-    it("should fail to retrieve user profile if the user does not exist", async () => {
+    it("should reject check-in if the requesting user is not registered", async () => {
         const gym = await gyms.create({
             title: "gym-tes",
             longitude: 93,
@@ -98,7 +98,7 @@ describe("Check in use case", () => {
         await expect(SystemUnderTest.execute(checkInCommand)).rejects.instanceOf(UserNotFoundError)
     })
 
-    it("should be able to check in", async () => {
+    it("should persist a new check-in for a valid user at a nearby gym", async () => {
         const gym = await gyms.create({
             title: "gym-tes",
             longitude: 93,
