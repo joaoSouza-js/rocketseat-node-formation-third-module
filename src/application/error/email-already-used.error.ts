@@ -1,6 +1,6 @@
-export class EmailNotFoundedError extends Error {
+export class EmailNotFoundError extends Error {
     constructor(email: string) {
         super(`Email does't exist: ${email}`);
-        this.name = "EmailNotFoundedError";
+        this.name = "EmailNotFoundError";
     }
 }

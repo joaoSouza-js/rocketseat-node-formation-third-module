@@ -1,7 +1,7 @@
 import { BadRequestError } from "@/application/error/bad-request";
-import { EmailAlreadyUsedError } from "@/application/error/email-not-founded.error";
+import { EmailAlreadyUsedError } from "@/application/error/email-not-found.error";
 import { UserCredentialsError } from "@/application/error/user-credentials-error";
-import { UserNotFoundedError } from "@/application/error/user-not-founded-error";
+import { UserNotFoundError } from "@/application/error/user-not-found.error";
 import { env } from "@/env";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { ZodError } from "zod";
@@ -12,7 +12,7 @@ export function errorHandler(error: unknown, _: FastifyRequest, reply: FastifyRe
     const isBadRequestError = error instanceof BadRequestError
     const isEmailAlreadyUsed = error instanceof EmailAlreadyUsedError
     const isUserCredentialsError = error instanceof UserCredentialsError
-    const isUseNotFoundedError = error instanceof UserNotFoundedError
+    const isUseNotFoundError = error instanceof UserNotFoundError
     if (env.NODE_ENV !== "prod") {
         console.error(error)
     }
@@ -41,7 +41,7 @@ export function errorHandler(error: unknown, _: FastifyRequest, reply: FastifyRe
         return reply.status(409).send({ errors: { message: error.message } })
     }
 
-    if (isUseNotFoundedError) {
+    if (isUseNotFoundError) {
         return reply.status(409).send({ errors: { message: error.message } })
 
     }

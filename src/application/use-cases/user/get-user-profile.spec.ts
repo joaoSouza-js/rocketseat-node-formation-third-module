@@ -1,4 +1,4 @@
-import { UserNotFoundedError } from "@/application/error/user-not-founded-error";
+import { UserNotFoundError } from "@/application/error/user-not-found.error";
 import { inMemoryUserRepositories } from "@/repositories/in-memory/in-memory-user-repositories";
 import { User, UsersRepository } from "@/repositories/users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
@@ -15,7 +15,7 @@ describe("get profile use case", () => {
 
     it("should fail to retrieve user profile if the user does not exist", async () => {
         const userId = "oids"
-        await expect(SystemUnderTest.execute({ id: userId })).rejects.instanceOf(UserNotFoundedError)
+        await expect(SystemUnderTest.execute({ id: userId })).rejects.instanceOf(UserNotFoundError)
     })
 
     it("should be able to show the user", async () => {

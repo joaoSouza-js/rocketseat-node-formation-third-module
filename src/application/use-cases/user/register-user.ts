@@ -1,5 +1,5 @@
 import type { RegisterUserCommand, RegisterUserUseCaseResponse } from "@/application/dto/user-dto/register-user"
-import { EmailAlreadyUsedError } from "@/application/error/email-not-founded.error"
+import { EmailAlreadyUsedError } from "@/application/error/email-not-found.error"
 import type { Hasher } from "@/application/port/hasher"
 import type { IdGenerator } from "@/application/port/id-generator"
 import type { UsersRepository } from "@/repositories/users-repository"
