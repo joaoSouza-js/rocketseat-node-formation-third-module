@@ -1,6 +1,4 @@
-import { AuthenticationUseCase } from "@/application/use-cases/user/authentication-use-case"
-import { Argon2Hasher } from "@/infra/hash/argon-hasher"
-import { prismaUsersRepositories } from "@/repositories/prisma/prisma-users-repositories"
+import { makeAuthenticationUseCase } from "@/application/use-cases/factories/user/make-authentication-use-case"
 import type { FastifyReply, FastifyRequest } from "fastify"
 import z from "zod"
 
@@ -11,11 +9,9 @@ const authenticationSchema = z.object({
 
 
 export async function authenticationController(request: FastifyRequest, reply: FastifyReply) {
-    const userRepository = new prismaUsersRepositories()
-    const hasher = new Argon2Hasher()
 
     const user = authenticationSchema.parse(request.body)
-    const authenticationUseCase = new AuthenticationUseCase(userRepository, hasher)
+    const authenticationUseCase = makeAuthenticationUseCase()
     const response = await authenticationUseCase.execute(user)
 
     const oneWeek = 30 * 60 * 24 * 7

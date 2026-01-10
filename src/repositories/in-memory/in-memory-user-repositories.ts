@@ -13,4 +13,9 @@ export class inMemoryUserRepositories implements UsersRepository {
         return Promise.resolve(user)
     }
 
+    findUserById(id: string): Promise<User | null> {
+        const user = this.users.find(user => user.id === id) ?? null
+        return Promise.resolve(user)
+    }
+
 }

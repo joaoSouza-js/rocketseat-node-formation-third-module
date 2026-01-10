@@ -5,7 +5,7 @@ import { hashMock } from "@/infra/hash/hash-mock";
 import { inMemoryUserRepositories } from "@/repositories/in-memory/in-memory-user-repositories";
 import { User, UsersRepository } from "@/repositories/users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { AuthenticationUseCase } from "./authentication-use-case";
+import { AuthenticationUseCase } from "./authentication";
 
 describe("authentication use case", () => {
     let users: UsersRepository

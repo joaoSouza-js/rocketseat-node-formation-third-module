@@ -1,0 +1,39 @@
+import { UserNotFoundedError } from "@/application/error/user-not-founded-error";
+import { inMemoryUserRepositories } from "@/repositories/in-memory/in-memory-user-repositories";
+import { User, UsersRepository } from "@/repositories/users-repository";
+import { beforeEach, describe, expect, it } from "vitest";
+import { getUserProfileUseCase } from "./get-user-profile";
+
+describe("get profile use case", () => {
+    let users: UsersRepository
+    let SystemUnderTest: getUserProfileUseCase
+
+    beforeEach(() => {
+        users = new inMemoryUserRepositories()
+        SystemUnderTest = new getUserProfileUseCase(users)
+    })
+
+    it("should fail to retrieve user profile if the user does not exist", async () => {
+        const userId = "oids"
+        await expect(SystemUnderTest.execute({ id: userId })).rejects.instanceOf(UserNotFoundedError)
+    })
+
+    it("should be able to show the user", async () => {
+        const userEmail = "joedoe@gmail.com"
+        const userPassword = "12364564"
+
+
+        const user: User = {
+            email: userEmail,
+            id: "id-test",
+            name: "joe",
+            password_hash: userPassword
+        }
+
+        const userCreated = await users.create(user)
+
+        const userProfile = await SystemUnderTest.execute({ id: userCreated.id })
+
+        expect(userProfile.user.id).toEqual(expect.any(String))
+    })
+})

@@ -18,8 +18,9 @@ export class AuthenticationUseCase {
             throw new UserCredentialsError()
         }
 
+
         return {
-            user
+            user: user
         }
 
     }

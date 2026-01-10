@@ -1,8 +1,12 @@
 import type { FastifyInstance } from "fastify";
 import { authenticationController } from "../controller/users/authentication.controller";
-import { registerUserController } from "../controller/users/register-user-controller";
+import { registerUserController } from "../controller/users/register-user.controller";
+import { userAuthRoutes } from "./users.auth.routes";
 
 export function userRoutes(app: FastifyInstance) {
     app.post("/", registerUserController)
     app.post("/sessions", authenticationController)
+
+    app.register(userAuthRoutes)
+
 }

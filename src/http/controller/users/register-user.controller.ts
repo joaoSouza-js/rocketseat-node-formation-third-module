@@ -1,4 +1,4 @@
-import { makeRegisterUseCase } from "@/application/use-cases/factories/make-register-use-case";
+import { makeRegisterUseCase } from "@/application/use-cases/factories/user/make-register-use-case";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
