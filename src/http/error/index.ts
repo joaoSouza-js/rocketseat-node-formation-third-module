@@ -1,52 +1,27 @@
-import { BadRequestError } from "@/application/error/bad-request";
-import { EmailAlreadyUsedError } from "@/application/error/email-not-found.error";
-import { UserCredentialsError } from "@/application/error/user-credentials-error";
-import { UserNotFoundError } from "@/application/error/user-not-found.error";
-import { env } from "@/env";
+import { ApplicationError } from "@/application/error/application-error";
 import type { FastifyReply, FastifyRequest } from "fastify";
 import { ZodError } from "zod";
+import { ZodValidationError } from "./zod-validation-error";
 
 export function errorHandler(error: unknown, _: FastifyRequest, reply: FastifyReply) {
 
-    const isZodError = error instanceof ZodError
-    const isBadRequestError = error instanceof BadRequestError
-    const isEmailAlreadyUsed = error instanceof EmailAlreadyUsedError
-    const isUserCredentialsError = error instanceof UserCredentialsError
-    const isUseNotFoundError = error instanceof UserNotFoundError
-    if (env.NODE_ENV !== "prod") {
-        console.error(error)
+    if (error instanceof ZodError) {
+        error = new ZodValidationError(error)
     }
 
-    if (isZodError) {
-        return reply.status(400).send({
-            errors: error.issues.map(issue => ({
-                path: issue.path.join("."),
-                message: issue.message,
-                code: issue.code,
-            }))[0]
+    if (error instanceof ApplicationError) {
+        return reply.status(error.statusCode).send({
+            error: {
+                message: error.message,
+            },
         })
     }
-    if (isBadRequestError) {
-        return reply.status(400).send({ errors: { message: error.message } })
-    }
-    if (isEmailAlreadyUsed) {
-        return reply.status(409).send({ errors: { message: error.message } })
-    }
 
-    if (isEmailAlreadyUsed) {
-        return reply.status(409).send({ errors: { message: error.message } })
-    }
-
-    if (isUserCredentialsError) {
-        return reply.status(409).send({ errors: { message: error.message } })
-    }
-
-    if (isUseNotFoundError) {
-        return reply.status(409).send({ errors: { message: error.message } })
-
-    }
-
-    return reply.status(500).send({ errors: { message: "Internal server error" } })
-
+    return reply.status(500).send({
+        error: {
+            message: "Internal server error",
+            code: "INTERNAL_ERROR",
+        },
+    })
 
 }
