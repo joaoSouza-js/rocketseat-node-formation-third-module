@@ -1,0 +1,7 @@
+import { FastifyInstance } from "fastify";
+import { checkInController } from "../controller/check-in.controller";
+
+export function protectedRoutes(app: FastifyInstance) {
+    app.addHook('onRequest', (request, _) => request.jwtVerify());
+    app.post("/check-in", checkInController)
+}
