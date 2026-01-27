@@ -67,13 +67,24 @@ export class CheckInUseCase {
             throw new UserNotFoundError(input.userId)
         }
 
+        const checkInAlreadyMadeToday = await checkIns.findUserIdOnDate(
+            input.userId,
+            new Date()
+        )
+
+        if (checkInAlreadyMadeToday) {
+            throw new Error("Check-in already made today")
+        }
 
         const checkInId = idGenerator.next()
         const checkin = await checkIns.create({
             id: checkInId,
             gymId: gym.id,
             userId: user.id,
+            validated_at: new Date(),
         })
+
+        console.log("tests", checkin)
 
 
         return {

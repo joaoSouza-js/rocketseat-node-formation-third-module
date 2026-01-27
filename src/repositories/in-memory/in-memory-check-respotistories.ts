@@ -1,11 +1,29 @@
 import { CheckIn, CheckInsRepository, RegisterCheckIn } from "../checks-in-repositoriest";
 
 
+function checkSameDay(firstDate: Date | string, secondDate: Date | string): boolean {
+    const date1 = new Date(firstDate)
+    const date2 = new Date(secondDate)
+    return date1.getDate() === date2.getDate() &&
+        date1.getMonth() === date2.getMonth() &&
+        date1.getFullYear() === date2.getFullYear()
+}
+
 export class CheckInMemoryRepository implements CheckInsRepository {
+
+    findUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null> {
+
+        const currentCheckIn = this.checkIns.find(checkIn => {
+            const checkInDate = new Date(checkIn.createdAt ?? new Date())
+            const isOnSameDay = checkSameDay(checkInDate, date)
+            return isOnSameDay && checkIn.userId === userId
+        }) ?? null
+        return Promise.resolve(currentCheckIn)
+    }
     private checkIns: CheckIn[] = []
     create(checkIn: RegisterCheckIn): Promise<CheckIn> {
-        this.checkIns.push(checkIn)
-        return Promise.resolve(checkIn)
+        const checkInResponse: CheckIn = { ...checkIn, createdAt: new Date() }
+        this.checkIns.push(checkInResponse)
+        return Promise.resolve(checkInResponse)
     }
-
 }

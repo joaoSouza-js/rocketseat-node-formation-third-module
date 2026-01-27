@@ -6,7 +6,7 @@ import { CheckInMemoryRepository } from "@/repositories/in-memory/in-memory-chec
 import { gymInMemoryRepository } from "@/repositories/in-memory/in-memory-gym-repositories";
 import { inMemoryUserRepositories } from "@/repositories/in-memory/in-memory-user-repositories";
 import { User, UsersRepository } from "@/repositories/users-repository";
-import { beforeEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { CheckInCommand } from "../dto/check-in";
 import { CheckInLongDistanceError } from "../error/check-in-long-distance-error";
 import { GymNotFoundError } from "../error/gym-not-found.error";
@@ -40,6 +40,11 @@ describe("Check in use case", () => {
                 idGenerator
             }
         })
+        vi.useFakeTimers()
+    })
+
+    afterEach(() => {
+        vi.useRealTimers()
     })
 
     it("should throw GymNotFoundError when attempting to check in to a non-existent gym", async () => {
@@ -129,6 +134,39 @@ describe("Check in use case", () => {
         const response = await SystemUnderTest.execute(checkInCommand)
 
         expect(response.checkIn.id).toEqual(expect.any(String))
+    })
+
+    it("should not be able check in twice in day ", async () => {
+        vi.setSystemTime(new Date(2023, 0, 23, 12, 20))
+        const gym = await gyms.create({
+            title: "gym-tes",
+            longitude: 93,
+            latitude: 9090,
+            id: idGenerator.next(),
+            description: null,
+            phone: null
+        })
+        const userEmail = "joedoe@gmail.com"
+        const userPassword = "12364564"
+
+        const user: User = {
+            email: userEmail,
+            id: "id-test",
+            name: "joe",
+            password_hash: userPassword
+        }
+        await users.create(user)
+
+        const checkInCommand: CheckInCommand = {
+            gymId: gym.id,
+            latitude: 93,
+            longitude: 9090,
+            userId: user.id,
+
+        }
+
+        await SystemUnderTest.execute(checkInCommand)
+        await expect(SystemUnderTest.execute(checkInCommand)).rejects.instanceOf(Error)
     })
 
 })

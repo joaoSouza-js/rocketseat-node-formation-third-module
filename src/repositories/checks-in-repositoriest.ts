@@ -16,5 +16,5 @@ export interface CheckIn {
 
 export interface CheckInsRepository {
     create(checkIn: RegisterCheckIn): Promise<CheckIn>
-
+    findUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null>
 }
