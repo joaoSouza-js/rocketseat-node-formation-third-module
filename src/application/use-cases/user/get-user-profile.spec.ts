@@ -6,16 +6,16 @@ import { getUserProfileUseCase } from "./get-user-profile";
 
 describe("get profile use case", () => {
     let users: UsersRepository
-    let SystemUnderTest: getUserProfileUseCase
+    let systemUnderTest: getUserProfileUseCase
 
     beforeEach(() => {
         users = new inMemoryUserRepositories()
-        SystemUnderTest = new getUserProfileUseCase(users)
+        systemUnderTest = new getUserProfileUseCase(users)
     })
 
     it("should fail to retrieve user profile if the user does not exist", async () => {
         const userId = "oids"
-        await expect(SystemUnderTest.execute({ id: userId })).rejects.instanceOf(UserNotFoundError)
+        await expect(systemUnderTest.execute({ id: userId })).rejects.instanceOf(UserNotFoundError)
     })
 
     it("should be able to show the user", async () => {
@@ -32,7 +32,7 @@ describe("get profile use case", () => {
 
         const userCreated = await users.create(user)
 
-        const userProfile = await SystemUnderTest.execute({ id: userCreated.id })
+        const userProfile = await systemUnderTest.execute({ id: userCreated.id })
 
         expect(userProfile.user.id).toEqual(expect.any(String))
     })

@@ -21,7 +21,7 @@ describe("Check in use case", () => {
     let checkIns: CheckInsRepository
     let idGenerator: IdGenerator
     let distanceCalculator: DistanceCalculator
-    let SystemUnderTest: CheckInUseCase
+    let systemUnderTest: CheckInUseCase
 
     beforeEach(() => {
         users = new inMemoryUserRepositories()
@@ -29,7 +29,7 @@ describe("Check in use case", () => {
         checkIns = new CheckInMemoryRepository()
         idGenerator = new IdGeneratorMock()
         distanceCalculator = new FakeDistanceCalculator(30)
-        SystemUnderTest = new CheckInUseCase({
+        systemUnderTest = new CheckInUseCase({
             repositories: {
                 checkIns,
                 gyms,
@@ -55,7 +55,7 @@ describe("Check in use case", () => {
             userId: "id-test"
 
         }
-        await expect(SystemUnderTest.execute(checkInCommand)).rejects.instanceOf(GymNotFoundError)
+        await expect(systemUnderTest.execute(checkInCommand)).rejects.instanceOf(GymNotFoundError)
     })
 
     it("should prevent check-in when calculated distance exceeds 100 meters", async () => {
@@ -76,7 +76,7 @@ describe("Check in use case", () => {
             userId: "id-test"
 
         }
-        await expect(SystemUnderTest.execute(checkInCommand)).rejects.instanceOf(CheckInLongDistanceError)
+        await expect(systemUnderTest.execute(checkInCommand)).rejects.instanceOf(CheckInLongDistanceError)
 
 
     })
@@ -100,7 +100,7 @@ describe("Check in use case", () => {
 
         }
 
-        await expect(SystemUnderTest.execute(checkInCommand)).rejects.instanceOf(UserNotFoundError)
+        await expect(systemUnderTest.execute(checkInCommand)).rejects.instanceOf(UserNotFoundError)
     })
 
     it("should persist a new check-in for a valid user at a nearby gym", async () => {
@@ -131,7 +131,7 @@ describe("Check in use case", () => {
 
         }
 
-        const response = await SystemUnderTest.execute(checkInCommand)
+        const response = await systemUnderTest.execute(checkInCommand)
 
         expect(response.checkIn.id).toEqual(expect.any(String))
     })
@@ -165,8 +165,8 @@ describe("Check in use case", () => {
 
         }
 
-        await SystemUnderTest.execute(checkInCommand)
-        await expect(SystemUnderTest.execute(checkInCommand)).rejects.instanceOf(Error)
+        await systemUnderTest.execute(checkInCommand)
+        await expect(systemUnderTest.execute(checkInCommand)).rejects.instanceOf(Error)
     })
 
 })

@@ -1,29 +1,31 @@
 import type { CheckInsRepository } from "@/repositories/checks-in-repositories";
-import type { UsersRepository } from "@/repositories/users-repository";
 import type { GetUserCheckInAmountCommand, GetUserCheckInAmountResponse } from "../dto/get-user-check-in-amount";
-import { UserNotFoundError } from "../error/user-not-found.error";
+import { UserGuard } from "../guards/user-guard";
 
 interface Repositories {
-    users: UsersRepository;
     checkIns: CheckInsRepository;
+}
+
+interface Guards {
+    userGuard: UserGuard
 }
 
 interface GetUserCheckInAmountUseCaseDeps {
     repositories: Repositories;
+    guards: Guards
 }
 
-
-
 export class GetUserCheckInAmountUseCase {
-    constructor(private readonly deps: GetUserCheckInAmountUseCaseDeps) { }
+    private checkIns: CheckInsRepository
+    private userGuard: UserGuard
+    constructor(private readonly deps: GetUserCheckInAmountUseCaseDeps) {
+        this.checkIns = deps.repositories.checkIns
+        this.userGuard = deps.guards.userGuard
+    }
 
     async execute(input: GetUserCheckInAmountCommand): Promise<GetUserCheckInAmountResponse> {
-        const { repositories: { checkIns, users } } = this.deps
-        const user = await users.findUserById(input.userId)
-        if (!user) {
-            throw new UserNotFoundError(input.userId)
-        }
-        const userCheckIns = await checkIns.getUserCheckInsAmount(user.id)
+        await this.userGuard.ensureExists(input.userId)
+        const userCheckIns = await this.checkIns.getUserCheckInsAmount(input.userId)
         return {
             checkIns: userCheckIns
         }

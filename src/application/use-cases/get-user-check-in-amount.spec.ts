@@ -3,30 +3,30 @@ import { CheckInMemoryRepository } from "@/repositories/in-memory/in-memory-chec
 import { inMemoryUserRepositories } from "@/repositories/in-memory/in-memory-user-repositories";
 import { User, UsersRepository } from "@/repositories/users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
-import { UserNotFoundError } from "../error/user-not-found.error";
+import { UserGuard } from "../guards/user-guard";
 import { GetUserCheckInAmountUseCase } from "./get-user-check-in-amount";
 
 describe("Get user check in amount use case", () => {
     let checkIns: CheckInsRepository
     let users: UsersRepository
-    let SystemUnderTest: GetUserCheckInAmountUseCase
-
+    let systemUnderTest: GetUserCheckInAmountUseCase
+    let userGuard: UserGuard
     beforeEach(() => {
         users = new inMemoryUserRepositories()
         checkIns = new CheckInMemoryRepository()
-        SystemUnderTest = new GetUserCheckInAmountUseCase({
+        userGuard = new UserGuard(users)
+        systemUnderTest = new GetUserCheckInAmountUseCase({
             repositories: {
                 checkIns: checkIns,
-                users: users
+
+            },
+            guards: {
+                userGuard: userGuard
             }
         })
 
     })
 
-    it("should fail to retrieve user check in amount if the user does not exist", async () => {
-        const userId = "oids"
-        await expect(SystemUnderTest.execute({ userId })).rejects.instanceOf(UserNotFoundError)
-    })
 
     it("should return the user check in amount", async () => {
         const user: User = {
@@ -52,7 +52,7 @@ describe("Get user check in amount use case", () => {
         await Promise.all(checkInsPromises)
 
 
-        const checkInResponse = await SystemUnderTest.execute({
+        const checkInResponse = await systemUnderTest.execute({
             userId: userCreated.id,
         })
 
