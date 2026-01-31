@@ -14,7 +14,15 @@ export interface CheckIn {
     gymId: string | null;
 }
 
+export interface GetUserCheckInsHistory {
+    page?: number
+    limit?: number,
+    userId: string
+}
+
 export interface CheckInsRepository {
     create(checkIn: RegisterCheckIn): Promise<CheckIn>
     findUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null>
+    getUserCheckInsAmount(userId: string): Promise<number>
+    getUserCheckInsHistory(props: GetUserCheckInsHistory): Promise<CheckIn[]>
 }

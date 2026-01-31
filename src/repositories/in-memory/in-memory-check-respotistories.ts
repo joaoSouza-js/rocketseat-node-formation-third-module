@@ -1,4 +1,4 @@
-import { CheckIn, CheckInsRepository, RegisterCheckIn } from "../checks-in-repositoriest";
+import { CheckIn, CheckInsRepository, GetUserCheckInsHistory, RegisterCheckIn } from "../checks-in-repositories";
 
 
 function checkSameDay(firstDate: Date | string, secondDate: Date | string): boolean {
@@ -25,5 +25,15 @@ export class CheckInMemoryRepository implements CheckInsRepository {
         const checkInResponse: CheckIn = { ...checkIn, createdAt: new Date() }
         this.checkIns.push(checkInResponse)
         return Promise.resolve(checkInResponse)
+    }
+
+    getUserCheckInsAmount(userId: string): Promise<number> {
+        const usersCheckInAmount = this.checkIns.filter(checkIn => checkIn.userId === userId)
+        return Promise.resolve(usersCheckInAmount.length)
+    }
+
+    getUserCheckInsHistory({ userId }: GetUserCheckInsHistory): Promise<CheckIn[]> {
+        const usersCheckInHistory = this.checkIns.filter(checkIn => checkIn.userId === userId)
+        return Promise.resolve(usersCheckInHistory)
     }
 }

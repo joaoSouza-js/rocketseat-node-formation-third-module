@@ -1,4 +1,4 @@
-import { CheckIn } from "@/repositories/checks-in-repositoriest"
+import { CheckIn } from "@/repositories/checks-in-repositories"
 
 export interface CheckInCommand {
     userId: string

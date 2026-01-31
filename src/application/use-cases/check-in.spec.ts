@@ -1,6 +1,6 @@
 import { FakeDistanceCalculator } from "@/infra/gelocation-calculator/fake-geolocation-distance";
 import { IdGeneratorMock } from "@/infra/id-generator/id-generator-mock";
-import { CheckInsRepository } from "@/repositories/checks-in-repositoriest";
+import { CheckInsRepository } from "@/repositories/checks-in-repositories";
 import { GymRepository } from "@/repositories/gym-repository";
 import { CheckInMemoryRepository } from "@/repositories/in-memory/in-memory-check-respotistories";
 import { gymInMemoryRepository } from "@/repositories/in-memory/in-memory-gym-repositories";

@@ -1,4 +1,4 @@
-import type { CheckInsRepository } from "@/repositories/checks-in-repositoriest";
+import type { CheckInsRepository } from "@/repositories/checks-in-repositories";
 import type { GymRepository } from "@/repositories/gym-repository";
 import type { UsersRepository } from "@/repositories/users-repository";
 import type { CheckInCommand, CheckInResponse } from "../dto/check-in";
