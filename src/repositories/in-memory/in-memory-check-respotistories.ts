@@ -32,8 +32,9 @@ export class CheckInMemoryRepository implements CheckInsRepository {
         return Promise.resolve(usersCheckInAmount.length)
     }
 
-    getUserCheckInsHistory({ userId }: GetUserCheckInsHistory): Promise<CheckIn[]> {
-        const usersCheckInHistory = this.checkIns.filter(checkIn => checkIn.userId === userId)
-        return Promise.resolve(usersCheckInHistory)
+    getUserCheckInsHistory({ userId, limit = 20, page = 1 }: GetUserCheckInsHistory): Promise<CheckIn[]> {
+        let usersCheckInHistory = this.checkIns.filter(checkIn => checkIn.userId === userId)
+        const historyWithPagination = usersCheckInHistory.slice((page - 1) * limit, page * limit)
+        return Promise.resolve(historyWithPagination)
     }
 }
