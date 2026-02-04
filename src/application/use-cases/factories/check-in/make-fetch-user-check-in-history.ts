@@ -1,13 +1,13 @@
 import { UserGuard } from "@/application/guards/user-guard";
 import { PrismaCheckInRepositories } from "@/repositories/prisma/prisma-checkin-repositories";
 import { prismaUsersRepositories } from "@/repositories/prisma/prisma-users-repositories";
-import { GetUserCheckInHistoryUseCase } from "../../get-user-check-in-history";
+import { FetchUserCheckInHistoryUseCase } from "../../get-user-check-in-history";
 
-export function makeGetUserCheckInHistory() {
+export function makeFetchUserCheckInHistory() {
     const users = new prismaUsersRepositories()
     const userGuard = new UserGuard(users)
     const checkIns = new PrismaCheckInRepositories()
-    const useCase = new GetUserCheckInHistoryUseCase({
+    const useCase = new FetchUserCheckInHistoryUseCase({
         guards: {
             userGuard,
         },

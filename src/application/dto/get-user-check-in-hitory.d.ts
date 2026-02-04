@@ -1,10 +1,10 @@
 import { CheckIn } from "@/repositories/checks-in-repositories"
 import { ListsParams } from "./lists-params"
 
-export interface GetUserCheckInHistoryCommand extends ListsParams {
+export interface FetchUserCheckInHistoryCommand extends ListsParams {
     userId: string
 }
 
-export interface GetUserCheckInHistoryResponse {
+export interface FetchUserCheckInHistoryResponse {
     checkIns: CheckIn[]
 }

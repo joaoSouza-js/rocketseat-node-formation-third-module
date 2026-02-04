@@ -33,7 +33,7 @@ export class CheckInMemoryRepository implements CheckInsRepository {
     }
 
     getUserCheckInsHistory({ userId, limit = 20, page = 1 }: GetUserCheckInsHistory): Promise<CheckIn[]> {
-        let usersCheckInHistory = this.checkIns.filter(checkIn => checkIn.userId === userId)
+        const usersCheckInHistory = this.checkIns.filter(checkIn => checkIn.userId === userId)
         const historyWithPagination = usersCheckInHistory.slice((page - 1) * limit, page * limit)
         return Promise.resolve(historyWithPagination)
     }
