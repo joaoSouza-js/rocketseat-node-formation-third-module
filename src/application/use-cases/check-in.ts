@@ -84,9 +84,6 @@ export class CheckInUseCase {
             validated_at: new Date(),
         })
 
-        console.log("tests", checkin)
-
-
         return {
             checkIn: checkin
         }

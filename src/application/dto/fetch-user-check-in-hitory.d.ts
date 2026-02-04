@@ -1,5 +1,5 @@
-import { CheckIn } from "@/repositories/checks-in-repositories"
-import { ListsParams } from "./lists-params"
+import type { CheckIn } from "@/repositories/checks-in-repositories"
+import type { ListsParams } from "./lists-params"
 
 export interface FetchUserCheckInHistoryCommand extends ListsParams {
     userId: string

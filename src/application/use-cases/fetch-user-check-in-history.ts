@@ -1,5 +1,5 @@
 import { CheckInsRepository } from "@/repositories/checks-in-repositories";
-import { FetchUserCheckInHistoryCommand, FetchUserCheckInHistoryResponse } from "../dto/get-user-check-in-hitory";
+import { FetchUserCheckInHistoryCommand, FetchUserCheckInHistoryResponse } from "../dto/fetch-user-check-in-hitory";
 import { UserGuard } from "../guards/user-guard";
 
 interface Repositories {

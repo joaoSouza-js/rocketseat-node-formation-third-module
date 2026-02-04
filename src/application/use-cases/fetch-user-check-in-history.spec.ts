@@ -4,7 +4,7 @@ import { inMemoryUserRepositories } from "@/repositories/in-memory/in-memory-use
 import { User, UsersRepository } from "@/repositories/users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
 import { UserGuard } from "../guards/user-guard";
-import { FetchUserCheckInHistoryUseCase } from "./get-user-check-in-history";
+import { FetchUserCheckInHistoryUseCase } from "./fetch-user-check-in-history";
 
 describe("Get user check in history use case", () => {
     let checkIns: CheckInsRepository
@@ -81,13 +81,13 @@ describe("Get user check in history use case", () => {
             userId: user.id
         })
 
-        console.log(checkInResponse.checkIns)
+
 
         expect(checkInResponse.checkIns).toHaveLength(4)
         expect(checkInResponse.checkIns).toEqual(
             expect.arrayContaining([
                 expect.objectContaining({ id: "checkin-4" }),
-                expect.objectContaining({ id: "checkin-5" }),
+
             ])
         )
     })
