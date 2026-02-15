@@ -59,7 +59,7 @@ describe('validate check-in use case', () => {
         vi.useRealTimers()
     })
 
-    it('should throw a ExpirationCheckInError if check-in is expired ', async () => {
+    it('should throw a ExpirationCheckInError if check-in has more than 30 minutes ', async () => {
         const checkIn: RegisterCheckIn = {
             gymId: "gym-id",
             id: "checkin-id",
@@ -70,7 +70,9 @@ describe('validate check-in use case', () => {
 
         await checkIns.create(checkIn)
 
-        vi.setSystemTime(new Date(2023, 0, 23, 13, 30))
+        const oneHoursInMileSeconds = 60 * 60 * 1000 // 1 hour
+
+        vi.advanceTimersByTime(oneHoursInMileSeconds)
 
 
         await expect(sut.execute({
@@ -93,9 +95,9 @@ describe('validate check-in use case', () => {
 
         await checkIns.create(checkIn)
 
-        vi.setSystemTime(new Date(2023, 0, 23, 12, 33))
+        const twentyMinutesInMileSeconds = 20 * 60 * 1000 // 20 minutes
 
-
+        vi.advanceTimersByTime(twentyMinutesInMileSeconds)
 
         await expect(sut.execute({
             userId: user.id,
