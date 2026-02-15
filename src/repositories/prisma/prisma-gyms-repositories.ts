@@ -1,6 +1,6 @@
 import { prisma } from "@/infra/prisma";
 import type { GymModel } from "generated/prisma/models";
-import type { FindManyGym, Gym, GymRepository, RegisterGym } from "../gym-repository";
+import type { FindManyGym, FindManyNearbyGym, Gym, GymRepository, RegisterGym } from "../gym-repository";
 
 
 export class prismaGymsRepositories implements GymRepository {
@@ -24,6 +24,22 @@ export class prismaGymsRepositories implements GymRepository {
         }
 
         return gymFormatted
+    }
+
+    private findGymsWithinHundredKilometers(
+        userLat: number,
+        userLng: number
+    ): Promise<Gym[]> {
+
+        const TEN_KM_IN_METERS = 100000
+        return prisma.$queryRaw<Gym[]>`
+            SELECT id, title, "latitude", "longitude"
+            FROM "Gym"
+            WHERE ST_DistanceSphere(
+            ST_MakePoint("longitude", "latitude"),
+            ST_MakePoint(${userLng}, ${userLat})
+            ) <= ${TEN_KM_IN_METERS}
+        `;
     }
 
     async findById(id: string): Promise<Gym | null> {
@@ -54,5 +70,10 @@ export class prismaGymsRepositories implements GymRepository {
         const gymsFormatted = gymsFounded.map(this.formatGymPublic)
 
         return gymsFormatted
+    }
+
+    async findManyNearby(props: FindManyNearbyGym): Promise<Gym[]> {
+        const gyms = await this.findGymsWithinHundredKilometers(props.coordinate.latitude, props.coordinate.longitude)
+        return gyms
     }
 }

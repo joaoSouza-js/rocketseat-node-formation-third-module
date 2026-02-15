@@ -1,7 +1,7 @@
-import { CheckInsRepository } from "@/repositories/checks-in-repositories";
+import type { CheckInsRepository } from "@/repositories/checks-in-repositories";
 import { CheckInMemoryRepository } from "@/repositories/in-memory/in-memory-check-respotistories";
 import { inMemoryUserRepositories } from "@/repositories/in-memory/in-memory-user-repositories";
-import { User, UsersRepository } from "@/repositories/users-repository";
+import type { User, UsersRepository } from "@/repositories/users-repository";
 import { beforeEach, describe, expect, it } from "vitest";
 import { UserGuard } from "../guards/user-guard";
 import { GetUserCheckInAmountUseCase } from "./get-user-check-in-amount";

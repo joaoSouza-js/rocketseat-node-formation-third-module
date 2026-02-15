@@ -25,7 +25,7 @@ describe("Get user check in history use case", () => {
             }
         })
 
-        let userToCreate = {
+        const userToCreate = {
             email: "joedoe@gmail.com",
             id: "id-test",
             name: "joe",

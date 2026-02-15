@@ -3,8 +3,8 @@ import { FastifyReply, FastifyRequest } from "fastify";
 import z from "zod";
 
 const fetchUserCheckInHistoryQueryParams = z.object({
-    limit: z.number().optional().default(20),
-    page: z.number().optional().default(1)
+    limit: z.coerce.number().optional().default(20),
+    page: z.coerce.number().optional().default(1)
 })
 
 export async function fetchUserCheckInHistoryController(request: FastifyRequest, reply: FastifyReply) {

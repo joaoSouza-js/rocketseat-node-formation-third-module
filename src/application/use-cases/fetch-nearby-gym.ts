@@ -1,5 +1,5 @@
 import type { GymRepository } from "@/repositories/gym-repository";
-import type { FetchGymsCommand, FetchGymsResponse } from "../dto/fetch-gyms";
+import { FetchNearbyGymCommand, FetchNearbyGymResponse } from "../dto/validate-check-in";
 import type { UserGuard } from "../guards/user-guard";
 
 interface Repositories {
@@ -11,26 +11,26 @@ interface Guards {
 }
 
 
-type fetchGymUseCaseDeps = {
+type fetchNearbyGymUseCaseDeps = {
     repositories: Repositories
     guards: Guards
 }
 
-export class FetchGymUseCase {
+export class FetchNearbyGymUseCase {
     private gyms: GymRepository
     private userGuard: UserGuard
 
-    constructor(deps: fetchGymUseCaseDeps) {
+    constructor(deps: fetchNearbyGymUseCaseDeps) {
         const { guards, repositories } = deps
         this.gyms = repositories.gyms
         this.userGuard = guards.userGuard
     }
 
-    async execute(input: FetchGymsCommand): Promise<FetchGymsResponse> {
-        await this.userGuard.ensureExists(input.userid)
-        const gymsFounded = await this.gyms.searchMany({
+    async execute(input: FetchNearbyGymCommand): Promise<FetchNearbyGymResponse> {
+        await this.userGuard.ensureExists(input.userId)
+        const gymsFounded = await this.gyms.findManyNearby({
             limit: input.limit,
-            query: input.query,
+            coordinate: input.coordinate,
             page: input.page
         })
 

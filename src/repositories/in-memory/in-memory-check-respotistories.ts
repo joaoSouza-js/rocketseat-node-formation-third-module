@@ -37,4 +37,32 @@ export class CheckInMemoryRepository implements CheckInsRepository {
         const historyWithPagination = usersCheckInHistory.slice((page - 1) * limit, page * limit)
         return Promise.resolve(historyWithPagination)
     }
+
+    checkValidationCheckIn(firstDate: string | Date, secondDate: string | Date): boolean {
+        const date1 = new Date(firstDate)
+        const date2 = new Date(secondDate)
+        const maxValidationTimeInMinutes = 20
+
+        const timeDiffInMinutes = Math.abs(date1.getTime() - date2.getTime()) / (1000 * 60)
+        return timeDiffInMinutes <= maxValidationTimeInMinutes
+    }
+
+    validateCheckIn(checkInId: string): Promise<null> {
+        this.checkIns.map(checkIn => {
+
+            if (checkIn.id === checkInId) {
+                checkIn.validatedAt = new Date()
+            }
+
+            return checkIn
+
+        })
+        return Promise.resolve(null)
+
+    }
+
+    findById(checkInId: string): Promise<CheckIn | null> {
+        const checkIn = this.checkIns.find(checkIn => checkIn.id === checkInId) ?? null
+        return Promise.resolve(checkIn)
+    }
 }

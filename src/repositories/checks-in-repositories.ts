@@ -8,7 +8,7 @@ export interface RegisterCheckIn extends Prisma.CheckInCreateInput {
 }
 export interface CheckIn {
     id: string;
-    createdAt?: Date;
+    createdAt: Date;
     validatedAt?: Date;
     userId: string | null;
     gymId: string | null;
@@ -22,7 +22,9 @@ export interface GetUserCheckInsHistory {
 
 export interface CheckInsRepository {
     create(checkIn: RegisterCheckIn): Promise<CheckIn>
-    findUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null>
+    findUserIdOnDate(userId: string, date: Date | string): Promise<CheckIn | null>
+    findById(checkInId: string): Promise<CheckIn | null>
     getUserCheckInsAmount(userId: string): Promise<number>
     getUserCheckInsHistory(props: GetUserCheckInsHistory): Promise<CheckIn[]>
+    validateCheckIn(checkInId: string): Promise<null>
 }

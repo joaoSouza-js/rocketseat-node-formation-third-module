@@ -1,4 +1,4 @@
-import type { FindManyGym, Gym, GymRepository, RegisterGym } from "../gym-repository";
+import type { FindManyGym, FindManyNearbyGym, Gym, GymRepository, RegisterGym } from "../gym-repository";
 
 export class gymInMemoryRepository implements GymRepository {
     private gyms: Gym[] = []
@@ -25,4 +25,8 @@ export class gymInMemoryRepository implements GymRepository {
         return Promise.resolve(gymsWithPagination)
     }
 
+    findManyNearby(props: FindManyNearbyGym): Promise<Gym[]> {
+
+        return Promise.resolve(this.gyms)
+    }
 }

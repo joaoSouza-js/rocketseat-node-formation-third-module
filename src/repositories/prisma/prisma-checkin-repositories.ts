@@ -52,4 +52,35 @@ export class PrismaCheckInRepositories implements CheckInsRepository {
         return checkInHistoryFormatted
     }
 
+    async validateCheckIn(checkInId: string): Promise<null> {
+        prisma.checkIn.update({
+            where: {
+                id: checkInId
+            },
+            data: {
+                validated_at: new Date()
+            }
+        })
+
+        return null
+    }
+    async findById(checkInId: string): Promise<CheckIn | null> {
+        const checkIn = await prisma.checkIn.findUnique({
+            where: {
+                id: checkInId
+            }
+        })
+
+        if (!checkIn) return null
+
+        const checkInFormatted: CheckIn = {
+            gymId: checkIn.gym_Id,
+            id: checkIn.id,
+            userId: checkIn.user_Id,
+            createdAt: checkIn.created_at,
+            validatedAt: checkIn.validated_at
+        }
+        return checkInFormatted
+    }
+
 }
