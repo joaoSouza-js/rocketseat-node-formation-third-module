@@ -1,7 +1,20 @@
 import { prisma } from "@/infra/prisma";
+import dayjs from "dayjs";
+import { CheckInModel } from "generated/prisma/models";
 import { CheckIn, CheckInsRepository, GetUserCheckInsHistory, RegisterCheckIn } from "../checks-in-repositories";
 
 export class PrismaCheckInRepositories implements CheckInsRepository {
+
+    formatCheckInPublic(checkIn: CheckInModel): CheckIn {
+        const checkInFormatted: CheckIn = {
+            gymId: checkIn.gym_Id,
+            id: checkIn.id,
+            userId: checkIn.user_Id,
+            createdAt: checkIn.created_at,
+            validatedAt: checkIn.validated_at
+        }
+        return checkInFormatted
+    }
 
     async create(checkIn: RegisterCheckIn): Promise<CheckIn> {
         const checkInCreated = await prisma.checkIn.create({
@@ -19,8 +32,21 @@ export class PrismaCheckInRepositories implements CheckInsRepository {
             validatedAt: checkInCreated.validated_at
         }
     }
-    findUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null> {
-        throw new Error("Method not implemented.");
+    async findUserIdOnDate(userId: string, date: Date): Promise<CheckIn | null> {
+        const startOfTheDay = dayjs(date).startOf('day').toDate()
+        const endOfTheDay = dayjs(date).endOf('day').toDate()
+        const checkIn = await prisma.checkIn.findFirst({
+            where: {
+                user_Id: userId,
+                created_at: {
+                    gte: startOfTheDay,
+                    lte: endOfTheDay,
+                }
+            }
+        })
+        if (!checkIn) return null
+        const checkInFormatted = this.formatCheckInPublic(checkIn)
+        return checkInFormatted
     }
 
     async getUserCheckInsAmount(userId: string): Promise<number> {
@@ -73,13 +99,7 @@ export class PrismaCheckInRepositories implements CheckInsRepository {
 
         if (!checkIn) return null
 
-        const checkInFormatted: CheckIn = {
-            gymId: checkIn.gym_Id,
-            id: checkIn.id,
-            userId: checkIn.user_Id,
-            createdAt: checkIn.created_at,
-            validatedAt: checkIn.validated_at
-        }
+        const checkInFormatted = this.formatCheckInPublic(checkIn)
         return checkInFormatted
     }
 
