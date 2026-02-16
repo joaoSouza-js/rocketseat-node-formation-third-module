@@ -21,7 +21,8 @@ export class RegisterUserUseCase {
             id: this.idGenerator.next(),
             name: input.name,
             email: input.email,
-            password_hash: hashedPassword
+            password_hash: hashedPassword,
+            role: input.role
         })
         return { user: userCreated }
     }

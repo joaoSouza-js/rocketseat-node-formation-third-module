@@ -12,7 +12,8 @@ export class prismaUsersRepositories implements UsersRepository {
                 id: user.id,
                 email: user.email,
                 name: user.name,
-                password_hash: user.password_hash
+                password_hash: user.password_hash,
+                role: user.role
             }
         })
         return newUser
