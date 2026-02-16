@@ -1,8 +1,9 @@
-import { FastifyInstance } from "fastify";
+import type { FastifyInstance } from "fastify";
 import { checkInController } from "../controller/check-in.controller";
 import { fetchGymController } from "../controller/fetch-gym.controller";
 import { fetchUserCheckInHistoryController } from "../controller/fetch-user-check-in-history.controller";
 import { getUserCheckInsController } from "../controller/get-user-check-ins.controller";
+import { registerGymController } from "../controller/resgister-gym.controller";
 import { validateCheckInController } from "../controller/validate-check-in.controller";
 
 export function protectedRoutes(app: FastifyInstance) {
@@ -12,4 +13,5 @@ export function protectedRoutes(app: FastifyInstance) {
     app.get("/check-in/history", fetchUserCheckInHistoryController)
     app.get("/gyms/:query", fetchGymController)
     app.get("/check-in/validate", validateCheckInController)
+    app.post("/gyms", registerGymController)
 }

@@ -17,7 +17,7 @@ export async function authenticationController(request: FastifyRequest, reply: F
     const oneWeek = 30 * 60 * 24 * 7
     const token = await reply.jwtSign({
         id: response.user.id,
-
+        role: response.user.role ?? "USER"
     }, { expiresIn: oneWeek })
 
     reply.status(200).send({

@@ -7,14 +7,14 @@ export type RegisterUser = {
     name: string
     email: string
     password_hash: string,
-    role: UserRole
+    role?: UserRole
 }
 export type User = {
     id: string
     name: string
     password_hash: string
     email: string
-    role: UserRole
+    role?: UserRole
 }
 
 

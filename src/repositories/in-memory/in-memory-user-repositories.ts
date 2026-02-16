@@ -4,8 +4,9 @@ export class inMemoryUserRepositories implements UsersRepository {
     users: User[] = []
 
     create(user: RegisterUser): Promise<User> {
+        const newUser: User = { ...user, role: user.role ?? "USER" }
         this.users.push(user)
-        return Promise.resolve(user)
+        return Promise.resolve(newUser)
     }
 
     findUserByEmail(email: string): Promise<User | null> {
