@@ -11,10 +11,12 @@ export class getUserProfileUseCase {
         if (!user) {
             throw new UserNotFoundError(input.id)
         }
+
         const publicUser: PublicUserDTO = {
             email: user.email,
             id: user.id,
-            name: user.name
+            name: user.name,
+            role: user.role
         }
 
         return {

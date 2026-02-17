@@ -24,7 +24,8 @@ export async function authenticationController(request: FastifyRequest, reply: F
         user: {
             id: response.user.id,
             name: response.user.name,
-            email: response.user.email
+            email: response.user.email,
+            role: response.user.role
         },
         token: token
     })
